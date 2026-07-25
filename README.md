@@ -454,6 +454,8 @@ A map button (`show_measure_button`) that enters *measure mode*: click points on
 ### ⏱️ History Playback Scrubber
 A map button (`show_playback_button`) that opens a **timeline bar** at the bottom of the map. Press **play** and every tracked entity's marker glides along its own history while its trail draws itself in; drag the **slider** to scrub to any moment; pick a **speed** (1× / 2× / 4× / 8×). The bar shows the exact date & time. It replays the history the card has **already loaded** (each entity's *Hours to Show* / date range), so it makes **no extra API calls**. Multiple entities share one timeline, so you can watch how everyone moved together. Closing the bar snaps straight back to the live map.
 
+![image7](images/Timeline.gif)
+
 ```yaml
 show_playback_button: true
 show_playback_button_position: TOP_RIGHT   # optional
