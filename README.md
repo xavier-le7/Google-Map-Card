@@ -451,6 +451,14 @@ These features are powered by the **already-loaded** Google Maps JavaScript API 
 ### 📏 Measure tool
 A map button (`show_measure_button`) that enters *measure mode*: click points on the map to draw a path and read the running **distance** (and the enclosed **area** once you place 3+ points). Toggle the button off to clear.
 
+### ⏱️ History Playback Scrubber
+A map button (`show_playback_button`) that opens a **timeline bar** at the bottom of the map. Press **play** and every tracked entity's marker glides along its own history while its trail draws itself in; drag the **slider** to scrub to any moment; pick a **speed** (1× / 2× / 4× / 8×). The bar shows the exact date & time. It replays the history the card has **already loaded** (each entity's *Hours to Show* / date range), so it makes **no extra API calls**. Multiple entities share one timeline, so you can watch how everyone moved together. Closing the bar snaps straight back to the live map.
+
+```yaml
+show_playback_button: true
+show_playback_button_position: TOP_RIGHT   # optional
+```
+
 ### 🌐 Geodesic (great-circle) trails
 History and flight trails follow the true shortest path over the curved Earth (they curve on the map over long distances — exactly how real flight paths look). **On by default.** Set `geodesic_polylines: false` for straight screen-space lines.
 
@@ -711,6 +719,7 @@ You can choose your best theme—40 now and more to come!
 | `show_rainviewer_button` | boolean | **NEW (v5.15)** Show the animated Rain Radar (RainViewer) toggle button.                        |
 | `show_usgs_button`       | boolean | **NEW (v5.15)** Show the Earthquakes (USGS) toggle button.                                      |
 | `show_measure_button`    | boolean | **NEW (v6.01)** Show the Measure tool button — click points to measure distance (and area for 3+ points). Toggle off to clear. |
+| `show_playback_button`   | boolean | **NEW (v6.01)** Show the History Playback button — opens a bottom timeline bar to replay every entity's already-loaded history (play/pause, scrub, speed). No extra API calls. |
 | `buttons_opacity`        | float   | Opacity of all buttons on the map. Buttons will be solid when hover                             |
 
 ### 🌍 Localization & External Control
@@ -768,6 +777,7 @@ You can choose your best theme—40 now and more to come!
 | `show_rainviewer_button_position` | string | **NEW (v5.15)** Position of the Rain Radar toggle button. Default: `TOP_RIGHT`. |
 | `show_usgs_button_position`       | string | **NEW (v5.15)** Position of the Earthquakes toggle button. Default: `TOP_RIGHT`. |
 | `show_measure_button_position` | string | **NEW (v6.01)** Position of the measure-tool button. Default: `TOP_RIGHT`. |
+| `show_playback_button_position` | string | **NEW (v6.01)** Position of the History Playback button. Default: `TOP_RIGHT`. |
 
 ### ⚠️ Rotate & Tilt Limitations (Raster Mode)
 
