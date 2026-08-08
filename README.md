@@ -57,6 +57,7 @@
   * The `zoom` field now accepts a Home Assistant entity (`input_number`, `sensor`) for real-time zoom control
 * **🌐 Single-World Zoom Limit** 🆕 (v5.16) — `no_world_repeat` (**on by default**): stop zoom-out once the world fills the card so continents never repeat side by side; container-size aware, auto-adapts on resize. Set to `false` for Google's default infinite zoom-out.
 * **🆓 Free Google Tools** 🆕 (v6.01) — client-side: 📏 a Measure tool (distance/area), 🌐 geodesic (great-circle) trails, 🗺️ custom GeoJSON overlays (`geojson_layers`), 📐 live crow-flies distance lines between entities (`distance_lines`), and 📍 a styled popup (with address) when you tap a place/transit icon
+* **⏱️ History Playback** 🆕 (v6.01) — a timeline bar (`show_playback_button`) that replays every tracked entity's **already-loaded** location history right on the map: play/pause, scrub to any moment, 1×–8× speed. All entities share one timeline; the range follows your date-picker selection. No extra API calls.
 * **History Dot Shapes** 🆕 (v5.0.10)
   * Per-entity dot customization: circle, square, triangle, diamond, star, pentagon — filled or outline
   * Dot size auto-scales with polyline width, or can be set manually
@@ -68,6 +69,7 @@
   * **🌡️ Weather Badges (Open-Meteo)** — temperature + condition right on a marker and a today + tomorrow forecast in its popup, **per entity**, no API key.
   * **🕐 Local time in popups** — when a marker sits in another time zone, its popup shows the local time there (automatic).
 * **🏷️ Marker Labels** 🆕 (v5.2) — per-entity state + last-seen label under the marker (`show_marker_labels`).
+* **🖼️ Custom Name & Picture** 🆕 (v6.02) — per-entity `picture:` gives a marker photo to entities Home Assistant has none for (any `device_tracker`, `sensor`…) or replaces a person's; `name:` renames an entity across the whole card; `show_name: true` prints that name under the marker.
 * **🫥 Stale Marker Fade** 🆕 (v5.2) — markers whose entity hasn't updated in N minutes fade out (`stale_marker_minutes`).
 * **🧹 GPS Jitter Filter** 🆕 (v5.2) — per-entity `min_accuracy`: drop low-accuracy history points **inside your shown zones** so trails don't jump while stationary.
 * **🔢 Zone Occupancy Badge** 🆕 (v5.2) — show a count of how many tracked entities are inside each shown zone.
@@ -452,9 +454,7 @@ These features are powered by the **already-loaded** Google Maps JavaScript API 
 A map button (`show_measure_button`) that enters *measure mode*: click points on the map to draw a path and read the running **distance** (and the enclosed **area** once you place 3+ points). Toggle the button off to clear.
 
 ### ⏱️ History Playback Scrubber
-A map button (`show_playback_button`) that opens a **timeline bar** at the bottom of the map. Press **play** and every tracked entity's marker glides along its own history while its trail draws itself in; drag the **slider** to scrub to any moment; pick a **speed** (1× / 2× / 4× / 8×). The bar shows the exact date & time. It replays the history the card has **already loaded** (each entity's *Hours to Show* / date range), so it makes **no extra API calls**. Multiple entities share one timeline, so you can watch how everyone moved together. Closing the bar snaps straight back to the live map.
-
-![image7](images/Timeline.gif)
+A map button (`show_playback_button`) that opens a **timeline bar** at the bottom of the map. Press **play** and every tracked entity's marker glides along its own history while its trail draws itself in; drag the **slider** to scrub to any moment; pick a **speed** (1× / 2× / 4× / 8×). The bar shows the exact date & time. It replays the history the card has **already loaded**, so it makes **no extra API calls**. Multiple entities share one timeline, so you can watch how everyone moved together. When you've picked a **date range** (date-picker or a preset) the timeline spans exactly that range; otherwise it covers the rolling *Hours to Show* window. Closing the bar snaps straight back to the live map.
 
 ```yaml
 show_playback_button: true
@@ -692,6 +692,9 @@ You can choose your best theme—40 now and more to come!
 | `show_marker_labels`            | boolean | **NEW (v5.2)** Show a small label under this marker with its state and last-seen age. Default: `false`. |
 | `min_accuracy`                  | number  | **NEW (v5.2) GPS jitter filter.** Inside your shown zones, history points whose GPS accuracy is worse (larger) than this many meters are dropped from the polyline, so a stationary entity's trail doesn't jump. `0`/unset = no filtering. |
 | `weather_badges`                | boolean | **NEW (v5.15)** Show an Open-Meteo temperature + condition badge on this marker and a today + tomorrow forecast in its popup (no API key). `person`/`device_tracker` only. Default: `false`. |
+| `name`                          | string  | **NEW (v6.02)** Custom display name for this entity, replacing its Home Assistant name everywhere on the card (marker tooltip, popup title, panels). Leave unset to keep the HA name. |
+| `picture`                       | string  | **NEW (v6.02)** Custom marker image — give a photo to entities Home Assistant has no picture for (`device_tracker`, `sensor`, …), or replace a `person`'s. Accepts `/local/...` or a full URL. Rendered as the usual circular marker. |
+| `show_name`                     | boolean | **NEW (v6.02)** Print the entity's name under its marker on the map (the custom `name` when set, otherwise the HA name). Combines with `show_marker_labels` / `weather_badges` in one label. Default: `false`. |
 
 ### 👤 Geo Location Sources
 
