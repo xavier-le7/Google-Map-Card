@@ -682,6 +682,8 @@ You can choose your best theme—40 now and more to come!
 | `polyline_width`                | integer | Width of the polyline for route history.                                                                                        |
 | `follow`                        | boolean | If `true`, map will center on this entity. When multiple entities have `follow: true`, the map will fit all of them.            |
 | `show_history_dots`             | boolean | If `false`, location history dots are not rendered. May increase speed of map rendering for long time period data.              |
+| `history_timestamp_attribute` | string  | Optional state attribute containing the actual measurement/fix time for history points (Unix seconds, Unix milliseconds, numeric string, or ISO 8601). Falls back to the normal HA history timestamp if missing/invalid. |
+| `history_timestamp_lookahead_hours` | number | When `history_timestamp_attribute` is set, extends the Recorder query beyond the displayed end time so delayed/offline points can still be discovered. `0` (default) disables look-ahead. |
 | `history_dot_shape`             | string  | Shape of history dots: `circle` (default), `square`, `triangle`, `diamond`, `star`, `pentagon`. Helps distinguish entities with similar colors. |
 | `history_dot_size`              | integer | Size of history dots in pixels. When omitted, auto-derived from polyline width (4× polyline width, minimum 4px). |
 | `history_dot_filled`            | boolean | If `true` (default), dots are filled solid. If `false`, dots are rendered as outlines only. |
@@ -695,6 +697,29 @@ You can choose your best theme—40 now and more to come!
 | `name`                          | string  | **NEW (v6.02)** Custom display name for this entity, replacing its Home Assistant name everywhere on the card (marker tooltip, popup title, panels). Leave unset to keep the HA name. |
 | `picture`                       | string  | **NEW (v6.02)** Custom marker image — give a photo to entities Home Assistant has no picture for (`device_tracker`, `sensor`, …), or replace a `person`'s. Accepts `/local/...` or a full URL. Rendered as the usual circular marker. |
 | `show_name`                     | boolean | **NEW (v6.02)** Print the entity's name under its marker on the map (the custom `name` when set, otherwise the HA name). Combines with `show_marker_labels` / `weather_badges` in one label. Default: `false`. |
+
+### ⏱️ Delayed / offline tracker timestamps
+
+For trackers that buffer GPS fixes while offline and upload them later, Home Assistant Recorder timestamps reflect **when HA received the state**, not necessarily when the GPS fix was measured.
+
+You can opt an entity into using a real measurement timestamp stored in one of its attributes:
+
+```yaml
+entities:
+  - entity: device_tracker.example_history
+    hours_to_show: 24
+    history_timestamp_attribute: fix_timestamp
+    history_timestamp_lookahead_hours: 24
+```
+
+With this configuration:
+
+- history points use `attributes.fix_timestamp` when it contains a valid timestamp;
+- invalid or missing values fall back to Home Assistant's normal history timestamp;
+- the card queries far enough beyond the displayed end time to discover delayed states, then filters and sorts them using the effective timestamp;
+- live history updates for that entity trigger a timestamp-aware refetch, so late points can be inserted chronologically instead of being appended at receipt time.
+
+Both options are per-entity and fully opt-in. Existing configurations are unchanged.
 
 ### 👤 Geo Location Sources
 
